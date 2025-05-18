@@ -18,8 +18,11 @@ export type Customer = {
 
 export type Invoice = {
   id: string;
+  id_product:string;
+  nama_produk: string;
   customer_id: string;
-  amount: number;
+  harga: number;
+  jumlah_beli: number;
   date: string;
   // In TypeScript, this is called a string union type.
   // It means that the "status" property can only be one of the two strings: 'pending' or 'paid'.
@@ -33,15 +36,34 @@ export type Revenue = {
 
 export type LatestInvoice = {
   id: string;
+  id_product:string;
   name: string;
   image_url: string;
   email: string;
   amount: string;
 };
 
+export type Products = {
+  id_product: string;
+  nama_product: string;
+  harga_product: string;
+  image_url: string;
+};
+
+export type MostProducts = {
+  id_produk:string;
+  nama_produk: string;
+  harga: number;
+  jumlah_beli: number;
+};
+
+export type ProductsRaw = Omit<Products, 'amount'> & {
+  harga: number;
+};
+
 // The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type LatestInvoiceRaw = Omit<LatestInvoice, 'amount'> & {
-  amount: number;
+  harga: number;
 };
 
 export type InvoicesTable = {

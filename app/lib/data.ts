@@ -6,8 +6,11 @@ import {
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
+  MostProducts,
+  ProductsRaw,
 } from './definitions';
 import { formatCurrency } from './utils';
+import { invoices } from './placeholder-data';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -16,12 +19,12 @@ export async function fetchRevenue() {
     // Artificially delay a response for demo purposes.
     // Don't do this in production :)
 
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    console.log('Fetching revenue data...');
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const data = await sql<Revenue[]>`SELECT * FROM revenue`;
 
-    // console.log('Data fetch completed after 3 seconds.');
+    console.log('Data fetch completed after 3 seconds.');
 
     return data;
   } catch (error) {
@@ -41,7 +44,32 @@ export async function fetchLatestInvoices() {
 
     const latestInvoices = data.map((invoice) => ({
       ...invoice,
-      amount: formatCurrency(invoice.amount),
+      harga: formatCurrency(invoice.harga),
+    }));
+    return latestInvoices;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch the latest invoices.');
+  }
+}
+
+
+
+
+export async function fetchMostProducts() {
+  try {
+
+
+    const data = await sql<ProductsRaw[]>`
+      SELECT Products.harga_product, Products.nama_product, Products.image, Product.id_product
+      FROM product
+      JOIN customers ON invoices.customer_id = customers.id
+      ORDER BY invoices.date DESC
+      LIMIT 5`;
+
+    const latestInvoices = data.map((invoice) => ({
+      ...invoice,
+      harga: formatCurrency(invoice.harga),
     }));
     return latestInvoices;
   } catch (error) {
