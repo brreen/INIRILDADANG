@@ -3,8 +3,6 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import { MostProducts } from '@/app/lib/definitions';
-import { fetchMostPopularProducts } from '@/app/lib/prisma';
-
 import { mostproduct } from '@/app/lib/placeholder-data';
 
 export default async function MostProduct({
